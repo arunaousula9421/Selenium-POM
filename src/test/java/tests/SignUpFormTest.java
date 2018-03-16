@@ -1,4 +1,4 @@
-package com.selenium.pom.tests;
+package tests;
 
 import com.selenium.pom.Page.ReceiptPage;
 import com.selenium.pom.Page.SignUpPage;
