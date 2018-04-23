@@ -2,3 +2,9 @@
 .DS_Store
 .idea/*
 target/*
+
+
+src/.DS_Store
+Selenium-POM.iml
+src/.DS_Store
+

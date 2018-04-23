@@ -1,11 +1,16 @@
 package com.selenium.pom.Utils;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterClass;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,22 +19,57 @@ import java.util.concurrent.TimeUnit;
 public class BaseSetUp {
 
     protected static WebDriver driver;
+    protected static Properties prop;
+    protected static EventFiringWebDriver e_driver;
+    protected static WebEventListener eventListener;
 
-    @BeforeClass
-    public static void setUp(){
-        System.setProperty("webdriver.gecko.driver", "src/main/java/com/selenium/pom/resources/geckodriver");
-        driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+    public BaseSetUp(){
+        try {
+            prop = new Properties();
+            FileInputStream ip = new FileInputStream(System.getProperty("user.dir")+ "/src/main/java/com/selenium/pom"
+                                                        + "/config/config.properties");
+            prop.load(ip);
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public static void Initialization(){
+        String browserName = System.getProperty("browser");
+        if(browserName.equals("chrome")){
+            System.setProperty("webdriver.chrome.driver", "src/main/java/com/selenium/pom/resources/chromedriver");
+            driver = new ChromeDriver();
+        }
+        else if(browserName.equals("firefox")){
+            System.setProperty("webdriver.gecko.driver", "src/main/java/com/selenium/pom/resources/geckodriver");
+            driver = new FirefoxDriver();
+        }
+
+        e_driver = new EventFiringWebDriver(driver);
+        // Now create object of EventListerHandler to register it with EventFiringWebDriver
+        eventListener = new WebEventListener();
+        e_driver.register(eventListener);
+        driver = e_driver;
+
+        driver.manage().window().maximize();
+        driver.manage().deleteAllCookies();
+        driver.manage().timeouts().pageLoadTimeout(TestUtil.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(TestUtil.IMPLICIT_WAIT, TimeUnit.SECONDS);
+        driver.get(prop.getProperty("url"));
+    }
+
+    @BeforeMethod
+    public void setUp(){
+        Initialization();
     }
 
     @AfterMethod
-    public void cleanUp(){
-        driver.manage().deleteAllCookies();
+    public void tearDown(){
+        driver.quit();
     }
-
-    @AfterClass
-    public static void tearDown(){
-        driver.close();
-    }
-
 }

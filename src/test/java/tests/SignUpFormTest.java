@@ -11,19 +11,27 @@ import org.testng.annotations.Test;
  */
 public class SignUpFormTest extends BaseSetUp {
 
+
+
+    SignUpPage signUpPage;
+    ReceiptPage receiptPage;
+
+
+    public SignUpFormTest(){
+        super();
+    }
+
+
     @Test
     public void signUp(){
-        driver.get("http://www.kimschiller.com/page-object-pattern-tutorial/index.html");
-
-        SignUpPage signUpPage = new SignUpPage(driver);
+        signUpPage = new SignUpPage();
 
         signUpPage.enterName("First", "Last");
         signUpPage.enterAddress("123 Street", "12345");
 
-        ReceiptPage receiptPage = signUpPage.submit();
+        receiptPage = signUpPage.submit();
         Assert.assertTrue(receiptPage.isInitialized());
-
         Assert.assertEquals("Thank you!", receiptPage.confirmationHeader());
-
     }
+
 }

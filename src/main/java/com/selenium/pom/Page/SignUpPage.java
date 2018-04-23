@@ -1,14 +1,16 @@
 package com.selenium.pom.Page;
 
+import com.selenium.pom.Utils.BaseSetUp;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 /**
  * Created by arun on 16/03/2018.
  */
-public class SignUpPage extends PageObject {
+public class SignUpPage extends BaseSetUp {
 
     @FindBy(id = "firstname")
     private WebElement firstName;
@@ -30,8 +32,8 @@ public class SignUpPage extends PageObject {
     The idea here is to move this assertion into the constructor of the page object. Then the creation will fail if the page object for some reason does not get ready in time.
      */
 
-    public SignUpPage(WebDriver driver){
-        super(driver);
+    public SignUpPage(){
+        PageFactory.initElements(driver, this);
         Assert.assertTrue(firstName.isDisplayed());
     }
 
@@ -54,7 +56,6 @@ public class SignUpPage extends PageObject {
 
     public ReceiptPage submit(){
         this.submitButton.click();
-        return new ReceiptPage(driver);
+        return new ReceiptPage();
     }
-
 }

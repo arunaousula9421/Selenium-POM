@@ -1,19 +1,20 @@
 package com.selenium.pom.Page;
 
-import org.openqa.selenium.WebDriver;
+import com.selenium.pom.Utils.BaseSetUp;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 /**
  * Created by arun on 16/03/2018.
  */
-public class ReceiptPage extends PageObject{
+public class ReceiptPage extends BaseSetUp{
 
     @FindBy(tagName = "h1")
     private WebElement header;
 
-    public ReceiptPage(WebDriver driver){
-        super(driver);
+    public ReceiptPage(){
+        PageFactory.initElements(driver, this);
     }
 
     public boolean isInitialized() {
