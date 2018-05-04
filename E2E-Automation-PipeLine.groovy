@@ -4,7 +4,7 @@ node {
    }
    stage('UI') {
         try {
-            sh "mvn test -Dbrowser=chrome
+            sh "mvn test -Dbrowser=chrome"
         } catch (err) {
             
         } 
