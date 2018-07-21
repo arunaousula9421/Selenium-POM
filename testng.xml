@@ -1,0 +1,18 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Cross Browser Testing" parallel="tests">
+
+    <test name="FirstTest">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="tests.SignUpFormTest"/>
+        </classes>
+    </test>
+
+    <test name="SecondTest">
+        <parameter name="browser" value="firefox"/>
+        <classes>
+            <class name="tests.SignUpFormTest"/>
+        </classes>
+    </test>
+
+</suite>

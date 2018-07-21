@@ -6,6 +6,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,17 +39,18 @@ public class BaseSetUp {
         }
     }
 
-
-
-    public static void Initialization(){
-        String browserName = System.getProperty("browser");
-        if(browserName.equals("chrome")){
+    @Parameters({"browser"})
+    @BeforeMethod(alwaysRun = true)
+    public void setUp(String browser) throws Exception{
+        if(browser.equals("chrome")){
             System.setProperty("webdriver.chrome.driver", "src/main/java/com/selenium/pom/resources/chromedriver");
             driver = new ChromeDriver();
         }
-        else if(browserName.equals("firefox")){
+        else if(browser.equals("firefox")){
             System.setProperty("webdriver.gecko.driver", "src/main/java/com/selenium/pom/resources/geckodriver");
             driver = new FirefoxDriver();
+        }else {
+            throw new Exception("Browser is not correct");
         }
 
         e_driver = new EventFiringWebDriver(driver);
@@ -63,12 +66,7 @@ public class BaseSetUp {
         driver.get(prop.getProperty("url"));
     }
 
-    @BeforeMethod
-    public void setUp(){
-        Initialization();
-    }
-
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown(){
         driver.quit();
     }
